@@ -1,33 +1,32 @@
 <template>
   <div v-if="!isAddPost">
-    <Button text="Add Post" backgroundColor="#ccc" @btn-click="addPost"/>
+    <Button text="Add Post" backgroundColor="#ccc" @btn-click="addPostBtnClick"/>
     <ul class="posts">
         <li v-for="post in posts" v-bind:key="post.id">
               <Post :post="post" @delete-post="deletePost" />
         </li>
     </ul>
   </div>
-
-  <form v-if="isAddPost" method="post" @submit="savePost">
-    <input type="text" placeholder="Post title">
-    <div class="">
-      <input type="submit" value="Submit">
-    </div>
-  </form>
+   <div v-if="isAddPost">
+       <AddPost @add-post = "addPost" />
+   </div>
 
 </template>
 <script>
 import Post from '@/components/Post.vue';
+import AddPost from '@/components/posts/AddPost.vue'
 import Button from './Button.vue';
+
 export default {
      components: {
         Post,
-        Button
+        Button,
+        AddPost
     },    
     data() {
         return {
             posts: [],
-            isAddPost: false
+            isAddPost: false,
         }
     },
     created() {
@@ -45,18 +44,21 @@ export default {
     },
     methods: {
         deletePost(id) {
-        console.log('deletePost', id);
-            this.posts = this.posts.filter((post) => post.id !== id);
+           this.posts = this.posts.filter((post) => post.id !== id);
         },
-        addPost() {
+        addPostBtnClick() {
           this.isAddPost = true;
-          console.log("button click - parent");
         },
-        savePost() {
-          console.log('save post');
+        addPost(post) {
           this.isAddPost = false;
-          //this.$router.push('/');
+          console.log(post);
         }
     },
 }
 </script>
+
+<style>
+#app {
+ text-align: left;
+}
+</style>
